@@ -1,11 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import Student from "./models/student.js";
-import studentRouter from "./Routers/studentRouter.js";
+
 import userRouter from "./Routers/userRouter.js";
-import { loginUser } from "./Routers/controllers/userController.js";
+
 import jwt from "jsonwebtoken";
+import productRouter from "./Routers/productRouter.js";
 
 const app=express();
 
@@ -13,17 +13,17 @@ app.use(bodyParser.json()); // a type of middleware - bodyparser
 
 
 
-app.use( // read all requests and do the functions *****
+app.use( 
 
     (req,res,next)=>{
 
-       // console.log("Request received")
+       
         const value =req.header("Authorization")
-      // console.log(value);
+      
 
         if (value != null){
         const token =value.replace("Bearer ","")
-      //  console.log(token)
+     
 
         jwt.verify(token,
 
@@ -63,68 +63,9 @@ mongoose.connect(connectionString).then(
 
 )
 
-app.use("/students", studentRouter) ;
-app.use("/users",userRouter);
 
-
-/*function started(){
-    console.log("Server started")
-}
-app.listen(5000,started);*/
-
-
-//Day 04-- this code should not write in this place -- this is wrong
-
-
-
-
-// db eke save krnda puluwan child kenek sadiima
-
-app.post("/",(req,res)=>{
-    
-   console.log(req.body)
-
-   const student= new Student(
-        {
-           name:req.body.name,
-           age:req.body.age,
-           email:req.body.email
-        }
-    )
-    student.save().then(()=>{
-        res.json({
-            message:"student saved successfully"
-        }
-    )
-    }).catch(
-        ()=>{
-            console.log("Failed to save student")
-        }
-    )
-})
-
-
-
-app.get("/", (req,res)=>{
-    console.log(req)
-    res.json({
-        message:"This is a get request"
-    })
-    console.log("This is a GET request.")
-})
-
-app.get("/", (req,res)=>{
-    Student.find().then((students)=>{
-        res.json(students)
-    }
-).catch(
-    ()=>{
-        res.json({
-            message:"Failed to fetch students"
-        })
-    }
-)
-}) 
+app.use("/users", userRouter)
+app.use("/products",productRouter)
 
 
 
@@ -132,17 +73,18 @@ app.get("/", (req,res)=>{
 
 
 
-app.delete("/",()=>{
-    console.log("This is a DELETE request.")
-})
-app.put("/",()=>{
-    console.log("This is a put  request")
-})
+
+
+
+
+
+
+
+
+
+
 app.listen(5000,()=>{
     console.log("Server started")
 })
 
 
-app.listen(5000,()=>{
-console.log("server started on port 5000");
-})
