@@ -90,3 +90,15 @@ res.status(403).json({
     });
 
 }
+
+export function isAdmin(req){
+    if(req.user == null){
+       
+        return false;
+    }
+    if (req.user.role == "admin"){
+        return true;
+    }else{
+        return false;
+    }
+}
